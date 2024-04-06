@@ -47,7 +47,7 @@ function updateProgressBar() {
     const passedPercent = (passedTime / totalTime * 100).toFixed(2);
 
     // 更新当前时间显示
-    document.getElementById('currentTime').textContent = `现在是 ${now.toLocaleString()}`;
+    document.getElementById('currentTime').textContent = `${now.toLocaleString()}`;
 
     // 更新进度条宽度和文字
     const progressBar = document.getElementById('progressBar');
