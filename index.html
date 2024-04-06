@@ -1,38 +1,65 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-    <title>Simple Clock</title>
-    <style>
-        /* 时钟样式 */
-        .clock {
-            font-family: 'Arial', sans-serif;
-            color: #017cff; /* 蓝色 */
-            font-size: 24px;
-            text-align: center;
-            padding: 20px;
-            margin: 0;
-            background-color: #f3f4f6; /* 浅灰色背景 */
-            border: 1px solid #ddd; /* 边框 */
-        }
-    </style>
+<meta charset="UTF-8">
+<title>2024年时间进度条</title>
+<style>
+    .progress-container {
+        width: 100%;
+        background-color: #F2E8DA; /* 剩余时间颜色 */
+        border: 1px solid black; /* 黑色边框 */
+        height: 30px; /* 进度条高度 */
+        position: relative; /* 相对定位 */
+        margin-top: 20px; /* 上方留出空间显示日期时间 */
+    }
+
+    .progress-bar {
+        height: 100%;
+        background-color: #FEBE98; /* 已逝去时间颜色 */
+        color: black; /* 文字颜色 */
+        display: flex; /* 使用flex布局，以便中心对齐文字 */
+        justify-content: center; /* 文字居中对齐 */
+        align-items: center; /* 文字垂直居中 */
+        width: 0%; /* 初始宽度 */
+        transition: width 1s ease; /* 过渡动画 */
+    }
+
+    .current-time {
+        text-align: center; /* 时间居中显示 */
+    }
+</style>
 </head>
 <body>
 
-<div id="clock" class="clock"></div>
+<h2 class="current-time" id="currentTime">当前日期和时间</h2>
+<div class="progress-container">
+  <div class="progress-bar" id="progressBar">0%</div>
+</div>
 
 <script>
-    function updateClock() {
-        var now = new Date();
-        var h = now.getHours();
-        var m = now.getMinutes();
-        var s = now.getSeconds();
-        m = m < 10 ? '0' + m : m;
-        s = s < 10 ? '0' + s : s;
-        var time = h + ":" + m + ":" + s;
-        document.getElementById('clock').innerHTML = time;
-        setTimeout(updateClock, 1000);
-    }
-    updateClock(); // 启动时钟
+function updateProgressBar() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const startOfYear = new Date(year, 0, 1);
+    const endOfYear = new Date(year + 1, 0, 1);
+    const passedTime = now - startOfYear;
+    const totalTime = endOfYear - startOfYear;
+    const passedPercent = (passedTime / totalTime * 100).toFixed(2);
+
+    // 更新当前时间显示
+    document.getElementById('currentTime').textContent = `现在是 ${now.toLocaleString()}`;
+
+    // 更新进度条宽度和文字
+    const progressBar = document.getElementById('progressBar');
+    progressBar.style.width = `${passedPercent}%`;
+    progressBar.textContent = `${passedPercent}%`;
+
+    // 每秒更新一次时间和进度条
+    setTimeout(updateProgressBar, 1000);
+}
+
+// 页面加载完毕时开始更新进度条和当前时间
+window.onload = updateProgressBar;
 </script>
 
 </body>
