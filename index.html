@@ -28,10 +28,16 @@
     background-color: #C0C0C0; /* 浅灰色 */
   }
   .progress-bar-green {
-    background-color: #90EE90; /* 浅绿色 */
+    background-color: #60C8B3; /* 浅绿色 */
   }
   .progress-bar-red {
-    background-color: #FFB6C1; /* 淡红色 */
+    background-color: #E881A6; /* 淡红色 */
+  }
+  #yearLabel {
+    color: #279D9F; /* 今年已过去的字体颜色 */
+  }
+  #dayLabel {
+    color: #CE3375; /* 今日已过去的字体颜色 */
   }
 </style>
 </head>
@@ -39,12 +45,12 @@
   <div id="currentDateTime" class="center bold"></div>
   <br>
   <div class="progress-container">
-    <div class="progress-label">今年已过去</div>
+    <div id="yearLabel" class="progress-label">今年已过去</div>
     <div id="yearProgress" class="progress-bar progress-bar-gray">0%</div>
     <div id="yearProgressRemaining" class="progress-bar progress-bar-green"></div>
   </div>
   <div class="progress-container">
-    <div class="progress-label">今日已过去</div>
+    <div id="dayLabel" class="progress-label">今日已过去</div>
     <div id="dayProgress" class="progress-bar progress-bar-gray">0%</div>
     <div id="dayProgressRemaining" class="progress-bar progress-bar-red"></div>
   </div>
@@ -69,7 +75,7 @@
       document.getElementById('dayProgressRemaining').style.width = (100 - (dayProgress * 100)).toFixed(2) + '%';
     }
 
-    setInterval(updateProgress, 1000);
+    setInterval(updateProgress, 60000); // 每分钟更新一次
     updateProgress();
   </script>
 </body>
