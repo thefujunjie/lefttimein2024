@@ -1,66 +1,76 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh">
 <head>
 <meta charset="UTF-8">
-<title>2024年时间进度条</title>
+<title>时间进度条</title>
 <style>
-    .progress-container {
-        width: 100%;
-        background-color: #F2E8DA; /* 剩余时间颜色 */
-        border: 1px solid black; /* 黑色边框 */
-        height: 30px; /* 进度条高度 */
-        position: relative; /* 相对定位 */
-        margin-top: 20px; /* 上方留出空间显示日期时间 */
-    }
-
-    .progress-bar {
-        height: 100%;
-        background-color: #FEBE98; /* 已逝去时间颜色 */
-        color: black; /* 文字颜色 */
-        display: flex; /* 使用flex布局，以便中心对齐文字 */
-        justify-content: center; /* 文字居中对齐 */
-        align-items: center; /* 文字垂直居中 */
-        width: 0%; /* 初始宽度 */
-        transition: width 1s ease; /* 过渡动画 */
-    }
-
-    .current-time {
-        text-align: center; /* 时间居中显示 */
-    }
+  .center { text-align: center; font-size: larger; }
+  .bold { font-weight: bold; }
+  .progress-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+  .progress-label {
+    margin-right: 10px;
+    white-space: nowrap;
+    background-color: transparent; /* 移除背景色 */
+  }
+  .progress-bar {
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+    color: black;
+    transition: width 0.5s ease-in-out;
+  }
+  .progress-bar-gray {
+    background-color: #C0C0C0; /* 浅灰色 */
+  }
+  .progress-bar-green {
+    background-color: #90EE90; /* 浅绿色 */
+  }
+  .progress-bar-red {
+    background-color: #FFB6C1; /* 淡红色 */
+  }
 </style>
 </head>
 <body>
+  <div id="currentDateTime" class="center bold"></div>
+  <br>
+  <div class="progress-container">
+    <div class="progress-label">今年已过去</div>
+    <div id="yearProgress" class="progress-bar progress-bar-gray">0%</div>
+    <div id="yearProgressRemaining" class="progress-bar progress-bar-green"></div>
+  </div>
+  <div class="progress-container">
+    <div class="progress-label">今日已过去</div>
+    <div id="dayProgress" class="progress-bar progress-bar-gray">0%</div>
+    <div id="dayProgressRemaining" class="progress-bar progress-bar-red"></div>
+  </div>
 
-<h2 class="current-time" id="currentTime">当前日期和时间</h2>
-<div class="progress-container">
-  <div class="progress-bar" id="progressBar">0%</div>
-</div>
+  <script>
+    function updateProgress() {
+      const now = new Date();
+      const startOfYear = new Date(now.getFullYear(), 0, 1);
+      const endOfYear = new Date(now.getFullYear() + 1, 0, 1);
+      const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
 
-<script>
-function updateProgressBar() {
-    const now = new Date();
-    const year = now.getFullYear();
-    const startOfYear = new Date(year, 0, 1);
-    const endOfYear = new Date(year + 1, 0, 1);
-    const passedTime = now - startOfYear;
-    const totalTime = endOfYear - startOfYear;
-    const passedPercent = (passedTime / totalTime * 100).toFixed(2);
+      const yearProgress = (now - startOfYear) / (endOfYear - startOfYear);
+      const dayProgress = (now - startOfDay) / (endOfDay - startOfDay);
 
-    // 更新当前时间显示
-    document.getElementById('currentTime').textContent = `${now.toLocaleString()}`;
+      document.getElementById('currentDateTime').innerHTML = now.toLocaleString('zh-CN', { hour12: false });
+      document.getElementById('yearProgress').style.width = (yearProgress * 100).toFixed(2) + '%';
+      document.getElementById('yearProgress').innerHTML = (yearProgress * 100).toFixed(2) + '%';
+      document.getElementById('yearProgressRemaining').style.width = (100 - (yearProgress * 100)).toFixed(2) + '%';
+      document.getElementById('dayProgress').style.width = (dayProgress * 100).toFixed(2) + '%';
+      document.getElementById('dayProgress').innerHTML = (dayProgress * 100).toFixed(2) + '%';
+      document.getElementById('dayProgressRemaining').style.width = (100 - (dayProgress * 100)).toFixed(2) + '%';
+    }
 
-    // 更新进度条宽度和文字
-    const progressBar = document.getElementById('progressBar');
-    progressBar.style.width = `${passedPercent}%`;
-    progressBar.textContent = `${passedPercent}%`;
-
-    // 每秒更新一次时间和进度条
-    setTimeout(updateProgressBar, 1000);
-}
-
-// 页面加载完毕时开始更新进度条和当前时间
-window.onload = updateProgressBar;
-</script>
-
+    setInterval(updateProgress, 1000);
+    updateProgress();
+  </script>
 </body>
 </html>
