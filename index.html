@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Clock</title>
+    <style>
+        /* 时钟样式 */
+        .clock {
+            font-family: 'Arial', sans-serif;
+            color: #017cff; /* 蓝色 */
+            font-size: 24px;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+            background-color: #f3f4f6; /* 浅灰色背景 */
+            border: 1px solid #ddd; /* 边框 */
+        }
+    </style>
+</head>
+<body>
+
+<div id="clock" class="clock"></div>
+
+<script>
+    function updateClock() {
+        var now = new Date();
+        var h = now.getHours();
+        var m = now.getMinutes();
+        var s = now.getSeconds();
+        m = m < 10 ? '0' + m : m;
+        s = s < 10 ? '0' + s : s;
+        var time = h + ":" + m + ":" + s;
+        document.getElementById('clock').innerHTML = time;
+        setTimeout(updateClock, 1000);
+    }
+    updateClock(); // 启动时钟
+</script>
+
+</body>
+</html>
